@@ -1,4 +1,3 @@
-
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method Not Allowed' });
@@ -24,22 +23,30 @@ export default async function handler(req, res) {
         messages: [
           {
             role: 'system',
-            content: 'אתה מחולל שאלות חכם. קבל טקסט וכתוב 4 שאלות עליו לפי רמות חשיבה עולות: איתור מידע, הבנה, השוואה, הערכה.',
+            content: 'אתה מחולל שאלות חכם. קבל טקסט וכתוב 4 שאלות עליו לפי רמות חשיבה עולות: איתור מידע, הבנה, השוואה, הערכה. אל תסביר, רק תכתוב את השאלות ברשימה.',
           },
           {
             role: 'user',
             content: text,
           }
         ],
+        temperature: 0.7,
       }),
     });
 
     const data = await response.json();
-    const output = data.choices?.[0]?.message?.content;
 
-    res.status(200).json({ questions: output });
+    const content = data.choices?.[0]?.message?.content;
+
+    if (!content) {
+      return res.status(500).json({ message: 'No content received from OpenAI.' });
+    }
+
+    // נחזיר את השאלות כמו שהאתר מחפש
+    res.status(200).json({ questions: content });
+
   } catch (error) {
     console.error('Error contacting OpenAI:', error);
-    res.status(500).json({ message: 'Something went wrong' });
+    res.status(500).json({ message: 'Something went wrong with OpenAI request.' });
   }
 }
