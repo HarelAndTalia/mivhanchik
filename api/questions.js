@@ -35,14 +35,12 @@ export default async function handler(req, res) {
     });
 
     const data = await response.json();
-
     const content = data.choices?.[0]?.message?.content;
 
     if (!content) {
       return res.status(500).json({ message: 'No content received from OpenAI.' });
     }
 
-    // נחזיר את השאלות כמו שהאתר מחפש
     res.status(200).json({ questions: content });
 
   } catch (error) {
