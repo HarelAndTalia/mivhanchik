@@ -1,12 +1,46 @@
 <!DOCTYPE html>
-<html lang="he">
+<html lang="he" dir="rtl">
   <head>
     <meta charset="UTF-8" />
-    <title>מבחנצ'יק</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>מבחנצ'יק</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <style>
+      body { font-family: sans-serif; max-width: 800px; margin: auto; padding: 2rem; }
+      textarea { width: 100%; height: 150px; }
+      button { background-color: #2563eb; color: white; padding: 0.5rem 1rem; border: none; border-radius: 4px; margin-top: 1rem; }
+      .question { background-color: #f3f4f6; padding: 1rem; border-radius: 6px; margin-bottom: 1rem; }
+    </style>
   </head>
-  <body style="direction: rtl; font-family: sans-serif;">
-    <div id="root"></div>
-    <script type="module" src="main.js"></script>
+  <body>
+    <h1>מבחנצ'יק</h1>
+    <p>הזינו טקסט וקבלו שאלות לפי רמות חשיבה</p>
+
+    <label>הדביקו כאן את טקסט השיעור:</label>
+    <textarea id="textInput" placeholder="כתבו כאן טקסט..."></textarea>
+    <br />
+    <button onclick="generateQuestions()">הפק שאלות</button>
+
+    <div id="questionsOutput" style="margin-top:2rem;"></div>
+
+    <script>
+      function generateQuestions() {
+        const output = document.getElementById('questionsOutput');
+        output.innerHTML = '';
+        const questions = [
+          { level: 'איתור מידע', q: 'מה הם הנושאים המרכזיים המוזכרים בטקסט?' },
+          { level: 'הבנה', q: 'כיצד משפיע הנושא המרכזי על החברה או על הפרט?' },
+          { level: 'השוואה', q: 'השווה בין שני רעיונות או תופעות המופיעים בטקסט.' },
+          { level: 'הערכה', q: 'מה דעתך על הפתרונות שהוצעו בטקסט? נמק.' }
+        ];
+        questions.forEach(q => {
+          const el = document.createElement('div');
+          el.className = 'question';
+          el.innerHTML = `<strong>${q.level}:</strong> ${q.q}`;
+          output.appendChild(el);
+        });
+      }
+    </script>
   </body>
 </html>
