@@ -2,31 +2,42 @@
 <html lang="he" dir="rtl">
   <head>
     <meta charset="UTF-8" />
-    <title>מבחנצ'יק</title>
+    <title>מבחנצ'יק – גרסת דיבאג</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <style>
       body { font-family: sans-serif; max-width: 800px; margin: auto; padding: 2rem; }
       textarea { width: 100%; height: 150px; }
       button { background-color: #2563eb; color: white; padding: 0.5rem 1rem; border: none; border-radius: 4px; margin-top: 1rem; }
       .question-box { background-color: #f3f4f6; padding: 1rem; border-radius: 6px; margin-bottom: 1rem; white-space: pre-line; }
+      .error { color: red; margin-top: 1rem; white-space: pre-wrap; }
     </style>
   </head>
   <body>
-    <h1>מבחנצ'יק</h1>
-    <p>הזינו טקסט וקבלו שאלות לפי רמות חשיבה</p>
+    <h1>מבחנצ'יק 🐛 (דיבאג)</h1>
+    <p>הזינו טקסט ולחצו על הכפתור. אם משהו משתבש – תראו את השגיאה.</p>
 
-    <label>הדביקו כאן את טקסט השיעור:</label>
-    <textarea id="textInput" placeholder="כתבו כאן טקסט..."></textarea>
+    <label>טקסט השיעור:</label>
+    <textarea id="textInput" placeholder="הדביקו כאן טקסט..."></textarea>
     <br />
     <button onclick="generateQuestions()">הפק שאלות</button>
 
     <div id="questionsOutput" style="margin-top:2rem;"></div>
+    <div id="errorOutput" class="error"></div>
 
     <script>
       async function generateQuestions() {
         const text = document.getElementById('textInput').value;
         const output = document.getElementById('questionsOutput');
-        output.innerHTML = 'טוען שאלות...';
+        const errorBox = document.getElementById('errorOutput');
+        output.innerHTML = '';
+        errorBox.innerHTML = '';
+
+        if (!text.trim()) {
+          errorBox.innerHTML = '⛔ הטקסט ריק – אנא הדביקו תוכן.';
+          return;
+        }
+
+        output.innerHTML = '⏳ שואל את הבינה המלאכותית...';
 
         try {
           const response = await fetch('/api/questions', {
@@ -40,11 +51,15 @@
           if (data.questions) {
             output.innerHTML = `<div class='question-box'>${data.questions}</div>`;
           } else {
-            output.innerHTML = 'לא התקבלו שאלות. נסו שוב.';
+            errorBox.innerHTML = '❌ שגיאה: לא התקבלו שאלות.
+' + JSON.stringify(data, null, 2);
+            output.innerHTML = '';
           }
         } catch (err) {
           console.error(err);
-          output.innerHTML = 'אירעה שגיאה בשליחת הבקשה.';
+          errorBox.innerHTML = '❌ שגיאה כללית:
+' + err.message;
+          output.innerHTML = '';
         }
       }
     </script>
