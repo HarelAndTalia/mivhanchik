@@ -2,7 +2,7 @@
 <html lang="he" dir="rtl">
   <head>
     <meta charset="UTF-8" />
-    <title>מבחנצ'יק 🐛 – גרסת דיבאג</title>
+    <title>מבחנצ'יק 🐛 – גרסה מתוקנת</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <style>
       body { font-family: sans-serif; max-width: 800px; margin: auto; padding: 2rem; }
@@ -13,7 +13,7 @@
     </style>
   </head>
   <body>
-    <h1>מבחנצ'יק 🐛 – גרסת דיבאג</h1>
+    <h1>מבחנצ'יק 🐛 – גרסה מתוקנת</h1>
     <p>הזינו טקסט ולחצו על הכפתור. אם משהו משתבש – תראו את השגיאה.</p>
 
     <label>טקסט השיעור:</label>
@@ -51,14 +51,12 @@
           if (data.questions) {
             output.innerHTML = `<div class='question-box'>${data.questions}</div>`;
           } else {
-            errorBox.innerHTML = '❌ שגיאה: לא התקבלו שאלות.
-' + JSON.stringify(data, null, 2);
+            errorBox.innerHTML = '❌ שגיאה: לא התקבלו שאלות.\n' + JSON.stringify(data, null, 2);
             output.innerHTML = '';
           }
         } catch (err) {
           console.error(err);
-          errorBox.innerHTML = '❌ שגיאה כללית:
-' + err.message;
+          errorBox.innerHTML = '❌ שגיאה כללית:\n' + err.message;
           output.innerHTML = '';
         }
       }
